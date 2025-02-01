@@ -3,6 +3,7 @@ package com.sky.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.CallableStatement;
 
 @Data
 public class EmployeeDTO implements Serializable {
@@ -18,5 +19,6 @@ public class EmployeeDTO implements Serializable {
     private String sex;
 
     private String idNumber;
+
 
 }

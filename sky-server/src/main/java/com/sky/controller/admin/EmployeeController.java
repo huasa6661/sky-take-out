@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
 import com.sky.result.Result;
@@ -74,9 +75,21 @@ public class EmployeeController {
         return Result.success();
     }
 
+    @PostMapping
+    @ApiOperation("新增员工")
     public Result save(@RequestBody EmployeeDTO employee) {
     log.info("新增员工：{}", employee);
+        System.out.println("当前线程的id"+Thread.currentThread().getId());
     employeeService.save(employee);
     return Result.success();
     }
+
+    @ApiOperation("修改密码")
+    @PostMapping("/editpassword")
+    public Result editpassword(@RequestBody PasswordEditDTO passwordEditDTO) {
+    log.info("修改密码：{}", passwordEditDTO);
+    employeeService.editpassword(passwordEditDTO);
+    return Result.success();
+    }
+
 }
