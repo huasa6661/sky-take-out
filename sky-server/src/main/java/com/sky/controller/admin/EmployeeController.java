@@ -3,9 +3,11 @@ package com.sky.controller.admin;
 import com.sky.constant.JwtClaimsConstant;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
@@ -14,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -72,7 +75,9 @@ public class EmployeeController {
     @ApiOperation("员工退出")
     @PostMapping("/logout")
     public Result<String> logout() {
-        return Result.success();
+        Thread.currentThread().interrupt();
+        // 返回成功结果
+        return Result.success("注销成功，请重新登录");
     }
 
     @PostMapping
@@ -92,4 +97,27 @@ public class EmployeeController {
     return Result.success();
     }
 
+    @ApiOperation("分页查询员工")
+    @GetMapping("/page")
+    public Result<PageResult> page(EmployeePageQueryDTO employeePageQueryDTO) {
+    log.info("分页查询员工：{}",employeePageQueryDTO);
+        PageResult pageResult = employeeService.page(employeePageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+    @ApiOperation("启用禁用员工账号")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status, Long id) {
+    log.info("启用禁用员工账号：{}",id);
+    employeeService.startOrStop(status,id);
+    return Result.success();
+    }
+    @ApiOperation("编辑员工信息")
+    @PutMapping
+    public Result edit(@RequestBody EmployeeDTO employeeDTO) {
+    log.info("编辑员工信息：{}",employeeDTO);
+    employeeService.edit(employeeDTO);
+    return Result.success("成功编辑");
+    }
 }
+
